@@ -38,7 +38,7 @@ ul>li {
 }
 
 .navliunderline:hover {
-    border-bottom: 1px solid green;
+    border-bottom: 1px solid #008000;
 }
 
 .second{
@@ -183,5 +183,5 @@ ul>li {
 }
 
 .Headingimg{
-    width: 20vw;
+    width: 15vw;
 }

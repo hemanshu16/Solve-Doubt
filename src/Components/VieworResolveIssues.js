@@ -1,7 +1,7 @@
 import React from "react";
-import "./generalquestions.css";
+import "./Users/generalquestions.css";
 
-export default function GeneralQuestions(props) {
+export default function ViewIssues(props) {
     const [issue, setIssue] = React.useState([])
 
     function handleIssue(e, id) {
