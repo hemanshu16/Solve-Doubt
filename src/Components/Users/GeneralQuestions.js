@@ -4,30 +4,18 @@ import "./generalquestions.css";
 export default function GeneralQuestions(props) {
     const [issue, setIssue] = React.useState([])
 
-    function handleIssue(e, id) {
-        setIssue(oldDetails => {
-            for (let i = 0; i < oldDetails.length; i++) {
-                if (oldDetails[i].id === id) {
-                    oldDetails[i] = { ...oldDetails[i], [e.target.value]: e.target.value }
-                }
-            }
-            return oldDetails
-        })
+   
 
-    }
+    
     React.useEffect(() => {
         const value = localStorage.getItem("islogged");
         if (localStorage.getItem("name") !== undefined) {
-            // setUserDetails(localStorage.getItem("name"));
+            
         }
         if (value !== undefined && value === "1") {
 
         }
-        setIssue([
-            { id: "4", title: "hello", description: "okay good" },
-            { id: "5", title: "hello 5", description: "okay good 5" },
-            { id: "6", title: "hello 6", description: "okay good 6" },
-        ])
+       
     }, [props]);
 
     return (
@@ -133,17 +121,7 @@ export default function GeneralQuestions(props) {
 
 
                 </div>
-                <div className="position-fixed bottom-0 end-0 p-3" >
-                    <div id="liveToast" className={true ? "toast show" : "toast hide"} role="alert" aria-live="assertive" aria-atomic="true">
-                        <div className="toast-header">
-
-                            <strong className="me-auto"> good morning</strong>
-
-                            <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-
-                    </div>
-                </div>
+                
             </div>
         </>
     )

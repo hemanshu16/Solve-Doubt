@@ -22,32 +22,31 @@ export default function SubmitIssue(props)
              return {...oldDetails, [e.target.name] : e.target.value}
          })
     }
-    function handleData()
+    async function handleData()
     {    alert(question.title + question.description)
-         // const response = await fetch("http://localhost:8080/Login", {
-    //   method: "POST",
-    //   mode: "cors",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
 
-    //   body: JSON.stringify(formData),
-    // });
-    // response.json().then((data) => {
-    //   if (data.error != null) {
-    //     setError({ iserror: true, error: data.error });
-    //   } else {
-        
-    //     props.setLogin(true);
-    //     localStorage.setItem("islogged", "1");
-    //     localStorage.setItem("name", data.user);
-    //     localStorage.setItem("jwt", data.token);
-    //     setName(data.user);
-    //     setError({ iserror: false, error: "" });
-    //     setrError({ iserror: false, error: "" });
-    //   }
-    // })
-       setquestion({title : "", description :""})
+        let headersList = {
+            "Accept": "*/*",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("jwt")
+           }
+           
+           let bodyContent = JSON.stringify({
+            "title" : question.title,
+            "description": question.description
+           });
+           
+           let response = await fetch("http://localhost:5000/api/application/submit", { 
+             method: "POST",
+             mode: "cors",
+             body: bodyContent,
+             headers: headersList
+           });
+           
+           let data = await response.text();
+           console.log(data);
+
+        setquestion({title : "", description :""})
     }
     return (
         <>
