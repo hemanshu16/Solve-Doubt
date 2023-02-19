@@ -6,8 +6,8 @@ export default function Navbar(props) {
   const [error, setError] = React.useState({ iserror: false, error: "" });
   const [rerror, setrError] = React.useState({ iserror: false, error: "" });
   const [userdetails, setUserDetails] = React.useState({
-    name : "hemanshu",
-    role : "Collector"
+    name : {firstname : ""},
+    role : ""
   });
   const [login, setLogin] = React.useState(false);
   const [formData, setFormData] = React.useState({
@@ -15,7 +15,7 @@ export default function Navbar(props) {
     password: "",
   });
   const [formData1, setFormData1] = React.useState({
-    name: "",
+    contact: "",
     email: "",
     password: "",
   });
@@ -27,7 +27,9 @@ export default function Navbar(props) {
      // setUserDetails(localStorage.getItem("name"));
     }
     if (value !== undefined && value === "1") {
-        setLogin(1);
+        // setLogin(1);
+        setUserDetails({"role" : localStorage.getItem("userid")})
+        // alert("Done")
     }
   }, [props]);
    
@@ -53,59 +55,67 @@ export default function Navbar(props) {
   }
   async function handleData() {
     console.log(formData);
-    // const response = await fetch("http://localhost:8080/Login", {
-    //   method: "POST",
-    //   mode: "cors",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
+    const response = await fetch("http://localhost:5000/api/user/login", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      }, 
 
-    //   body: JSON.stringify(formData),
-    // });
-    // response.json().then((data) => {
-    //   if (data.error != null) {
-    //     setError({ iserror: true, error: data.error });
-    //   } else {
+      body: JSON.stringify(formData),
+    });
+    response.json().then((data) => {
+      if (data.error != null) {
+        setError({ iserror: true, error: data.error });
+      } else {
         
-    //     props.setLogin(true);
-    //     localStorage.setItem("islogged", "1");
-    //     localStorage.setItem("name", data.user);
-    //     localStorage.setItem("jwt", data.token);
-    //     setName(data.user);
-    //     setError({ iserror: false, error: "" });
-    //     setrError({ iserror: false, error: "" });
-    //   }
-    // })
-    localStorage.setItem("islogged", "1");
-    setLogin(true)
+        // props.setLogin(true);
+        setLogin(true)
+        localStorage.setItem("islogged", "1");
+        localStorage.setItem("jwt", data.token);
+        localStorage.setItem("role",data.user.role);
+        localStorage.setItem("userid",data.user._id)
+        if(data.user.name.firstname === "firstname")
+        {
+          data.user.name.firstname = ""
+        }
+        setUserDetails(data.user)
+        setError({ iserror: false, error: "" });
+        setrError({ iserror: false, error: "" });
+      }
+    })
+    // localStorage.setItem("islogged", "1");
+    // setLogin(true)
   }
   async function handleData1() {
-    // const response = await fetch("http://localhost:8080/Registration", {
-    //   method: "POST",
-    //   mode: "cors",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-
-    //   body: JSON.stringify(formData1),
-    // });
-    // response.json().then((data) => {
-    //   if (data.errors != null) {
-    //     setrError({ iserror: true, error: data.errors[0].msg });
-    //   } else {
-    //     setRegistration(true);
-    //   }
-    // })
-    setRegistration(true)
-    
+    const response = await fetch("http://localhost:5000/api/user/register", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData1),
+    });
+    console.log(response)
+    response.json().then((data) => {
+      if (data.message != undefined || data.message != null) {
+        setrError({ iserror: true, error: data.message });
+      } else {
+        setRegistration(true);
+      }
+    })
+   
   }
   function logout(event) {
     event.preventDefault();
     localStorage.clear("islogged");
     setLogin(false);
+    localStorage.clear();
     setRegistration(false);
     setFormData({ email: "", password: "" });
     setFormData1({ name: "", email: "", password: "" });
+    setError({ iserror: false, error: "" });
+        setrError({ iserror: false, error: "" });
   }
 
   
@@ -121,7 +131,7 @@ export default function Navbar(props) {
     </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 navul">
-                {login && userdetails.role =="user" && <>
+                {login && userdetails.role === "enduser" && <>
                 <li className="nav-item navliunderline">
                 <Link to='/User/GeneralQuestions' className="nav-link" >
                     General Questions
@@ -220,7 +230,7 @@ export default function Navbar(props) {
             {login && (
               <>
                 
-                <p >Welcome {userdetails.name} </p> &nbsp; &nbsp; 
+                <p >Welcome {userdetails.name.firstname} </p> &nbsp; &nbsp; 
                 <a
                   className="btn btn-outline-success"
                   href="abc"
@@ -318,16 +328,7 @@ export default function Navbar(props) {
          </div>
          {!registration && (
            <div className="login--body">
-             <div className="input--class">
-               <input
-                 type="text"
-                 className="input--login"
-                 name="name"
-                 onChange={handleChange1}
-                 placeholder="User Name"
-                 value={formData1.name}
-               />
-             </div>
+           
 
              <div className="input--class">
                <input
@@ -337,6 +338,16 @@ export default function Navbar(props) {
                  onChange={handleChange1}
                  placeholder="Email Address"
                  value={formData1.email}
+               />
+             </div>
+             <div className="input--class">
+               <input
+                 type="text"
+                 className="input--login"
+                 name="contact"
+                 onChange={handleChange1}
+                 placeholder="Contact Number"
+                 value={formData1.contact}
                />
              </div>
              <div className="input--class">

@@ -3,31 +3,57 @@ import React from "react";
 
 export default function Profile(props) {
     const [login, setLogin] = React.useState(false);
-    const [userdetails, setUserDetails] = React.useState({
-        name:{
-            firstname: "",
-            middlename: "",
-            lastname: ""
-        },
-        email:"",
-        password: "",
-        contact: "",
-        aadhaarcard_no: "",
-        address:{
-            home:"",
-            village: "",
-            town: "",
-            district: "",
-            pincode: ""
-        },
-    });
+    const [userdetails, setUserDetails] = React.useState(
+        {
+            name: {
+              "firstname": "firstname",
+              "middlename": "middlename",
+              "lastname": "lastname"
+            },
+            "address": {
+              "home": "-",
+              "village": "-",
+              "town": "-",
+              "district": "-",
+              "pincode": 0
+            },
+            "_id": "63f1ba88de558c5de578066e",
+            "email": "first@gmail.com",
+            "password": "$2a$10$SER8VoDWfL5jI.j8Jq1WTOpew4VQPVV0InwwG/TZeYsf6/S/BihqG",
+            "contact": 1234512345,
+            "aadhaarcard_no": "Sun Feb 19 2023 11:28:31 GMT+0530 (India Standard Time)",
+            "approved": "false",
+            "reason": "NONE",
+            "role": "enduser",
+            "__v": 0
+          }
+    );
+    async function  getuserdetails (userid)
+    {
+           let headersList = {
+                "Accept": "*/*",
+                "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2YxYjUxMzMxZWZhMTcwNTVkOGQ1MmYiLCJjb2xsZWN0aW9uTmFtZSI6IlVzZXIiLCJpYXQiOjE2NzY3ODkwNDcsImV4cCI6MTY3OTM4MTA0N30.TZ7kOBuTjHcBG7S1v7ZJ4qXVf4yvFhB8_HfefjH7pnU"
+               }
+               
+               let response = await fetch("localhost:5000/api/user/63f1b51331efa17055d8d52f", { 
+                 method: "GET",
+                 headers: headersList
+               });
+               
+               let data = await response.text();
+               console.log(data);
+    }
     React.useEffect(() => {
         const value = localStorage.getItem("islogged");
-        if (localStorage.getItem("name") !== undefined) {
-            // setUserDetails(localStorage.getItem("name"));
-        }
+        // if (localStorage.getItem("user") !== undefined) {
+            getuserdetails();
+        
+               
+
+        // }
         if (value !== undefined && value === "1") {
-            setLogin(1);
+            setLogin(true);
         }
     }, [props]);
     function handleChange(e)
@@ -107,12 +133,12 @@ export default function Profile(props) {
                                     </div>
                                     <div className="row ">
                                         <div className="col-md-4 "><label className="labels">First Name</label><input type="text" name="firstname" className="form-control"  onChange={handleChange} placeholder="first name" value={userdetails.name.firstname}  /></div>
-                                        <div className="col-md-4 "><label className="labels">Middle Name</label><input type="text" name="middlename" className="form-control" onChange={handleChange} placeholder="surname" value={userdetails.name.middlename}/></div>
+                                        <div className="col-md-4 "><label className="labels">Middle Name</label><input type="text" name="middlename" className="form-control" onChange={handleChange} placeholder="Middle name" value={userdetails.name.middlename}/></div>
                                         <div className="col-md-4 "><label className="labels">Surname</label><input type="text" name="lastname" className="form-control"  onChange={handleChange} value={userdetails.name.lastname} placeholder="surname" /></div>
 
                                     </div>
                                     <div className="row">
-                                        <div className="col-md-12"><label className="labels">Email Address</label><input type="email" name="email" onChange={handleChange} className="form-control" placeholder="Email Address" value={userdetails.email} /></div>
+                                        <div className="col-md-12"><label className="labels">Email Address</label><input type="email" name="email" onChange={handleChange} className="form-control" placeholder="Email Address" value={userdetails.email} disabled /></div>
                                         <div className="col-md-12"><label className="labels">Mobile No</label><input type="number" name="contact" className="form-control" onChange={handleChange}  placeholder="Mobile Number" value={userdetails.contact} /></div>
                                         <div className="col-md-12"><label className="labels">AadharCard Number</label><input type="nubmer" name="aadhaarcard_no"  onChange={handleChange} className="form-control" placeholder="AdharCard Number" value={userdetails.aadhaarcard_no} /></div>
                                         <div className="col-md-12"><label className="labels">Home No/Name</label><input type="text" name="home" className="form-control" onChange={handleChange} placeholder="Home No/Name" value={userdetails.address.home} /></div>
