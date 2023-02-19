@@ -173,7 +173,7 @@ export default function Navbar(props) {
                   </Link>
                 </li>
                 </>}
-                {login && userdetails.role =="Mamlatdar" && <>
+                {login && userdetails.role =="mm" && <>
                 <li className="nav-item navliunderline">
                 <Link to='/Mamlatdar/ViewIssues' className="nav-link" >
                     View Issues
@@ -186,7 +186,7 @@ export default function Navbar(props) {
                   </Link>
                 </li>
                 </>}
-                {login && userdetails.role =="Collector" && <>
+                {login && userdetails.role =="cl" && <>
                 
                 <li className="nav-item navliunderline">
                 <Link to='/Collector/ViewIssues' className="nav-link" >

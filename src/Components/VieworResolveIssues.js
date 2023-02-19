@@ -1,35 +1,68 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./Users/generalquestions.css";
+import Action from "./Action";
 
 export default function ViewIssues(props) {
-    const [issue, setIssue] = React.useState([])
 
-    function handleIssue(e, id) {
-        setIssue(oldDetails => {
-            for (let i = 0; i < oldDetails.length; i++) {
-                if (oldDetails[i].id === id) {
-                    oldDetails[i] = { ...oldDetails[i], [e.target.value]: e.target.value }
-                }
-            }
-            return oldDetails
-        })
+    const [app, setApp] = useState([]);
 
+    async function getdata() {
+        let headersList = {
+            "Accept": "*/*",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("jwt")
+        }
+
+        let response = await fetch(`http://localhost:5000/api/application/all`, {
+            method: "GET",
+            headers: headersList
+        });
+
+        let data = await response.text();
+        data = JSON.parse(data)
+        console.log(data)
+        setApp(data.applications)
     }
-    React.useEffect(() => {
-        const value = localStorage.getItem("islogged");
-        if (localStorage.getItem("name") !== undefined) {
-            // setUserDetails(localStorage.getItem("name"));
-        }
-        if (value !== undefined && value === "1") {
+    useEffect(() => {
+        getdata();
+    }, [])
+    // function handleaction(e,str,role,id)
+    // {
+    //     let action = setAction(str,role,e.target.value)
+    //     let apps = []
+    //     setApp(oldapps => {
+    //         for(let i=0;i<oldapps.length;i++)
+    //         {
+    //             if(oldapps[i]._id === id)
+    //             {   
+    //                 oldapps[i].action = action
+    //             }
+    //             apps.push(oldapps[i])
+    //         }
+    //         return apps;
+    //     })
+    // }
+    // function handlestatus(e,id)
+    // {   let apps = []
+    //     setApp(oldapps => {
+    //         for(let i=0;i<oldapps.length;i++)
+    //         {
+    //             if(oldapps[i]._id === id)
+    //             {   
+    //                 oldapps[i].status = e.target.value
+    //             }
+    //             apps.push(oldapps[i])
+    //         }
+    //         return apps;
+    //     })
+    // }
+    
 
-        }
-        setIssue([
-            { id: "4", title: "hello", description: "okay good" },
-            { id: "5", title: "hello 5", description: "okay good 5" },
-            { id: "6", title: "hello 6", description: "okay good 6" },
-        ])
-    }, [props]);
-
+    let role = localStorage.getItem('role')
+    const comp = app.map((ap) => {
+         <Action props={ap} />
+       
+    })
     return (
         <>
             <div className="container">
@@ -50,83 +83,7 @@ export default function ViewIssues(props) {
                     <div className="col-8 mt-4 issue">
                         <div className="card" >
                             <div className="card-body">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <h5 className="card-title">Card title</h5>
-                                    </div>
-                                    <div className="col-4">
-                                        <div className="row">
-                                            <p>Date</p>
-                                        </div>
-                                        <div className="row">
-                                            <p>By User name</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <h5 className="card-subtitle mb-2 text-muted">Status</h5>
-                                <hr />
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className="row">
-                                            <div className="col-8">
-                                                <p>By VC</p>
-                                            </div>
-                                            <div className="col-4">
-                                                <button className="btn btn-primary profile-button" type="button" >Forward to Mamlatdar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p>Action Taken</p>
-                                    <textarea className="actionupdate" placeholder="wirte your action here" ></textarea>
-
-                                    <p>Status</p>
-                                    <input type="text" className="actionupdate" placeholder="write your status here" />
-                                    <button className="btn btn-primary savechagesbutton" type="button" >Save Changes</button>
-
-                                </div>
-                                <hr />
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className="row">
-                                            <div className="col-8">
-                                                <p>By Mamlatdar</p>
-                                            </div>
-                                            <div className="col-4">
-                                                <button className="btn btn-primary profile-button" type="button" >Forward to Collector</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p>Action Taken</p>
-                                    <textarea className="actionupdate" placeholder="wirte your action here" ></textarea>
-
-                                    <p>Status</p>
-                                    <input type="text" className="actionupdate" placeholder="write your status here" />
-                                    <button className="btn btn-primary savechagesbutton" type="button" >Save Changes</button>
-
-                                </div>
-                                <hr />
-                                <div className="row">
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className="row">
-                                            <div className="col-8">
-                                                <p>By Collector</p>
-                                            </div>
-                                            <div className="col-4">
-                                                {/* <button className="btn btn-primary profile-button" type="button" >Forward to Mamlatdar</button> */}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p>Action Taken</p>
-                                    <textarea className="actionupdate" placeholder="wirte your action here" ></textarea>
-
-                                    <p>Status</p>
-                                    <input type="text" className="actionupdate" placeholder="write your status here" />
-                                    <button className="btn btn-primary savechagesbutton " type="button" >Save Changes</button>
-
-                                </div>
-                                </div>
+                                {comp}
                             </div>
                         </div>
                     </div>

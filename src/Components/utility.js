@@ -9,4 +9,15 @@ function getAction(str, role)
         return arr[2]
 }
 
-export {getAction}
+function setAction(str,role,change)
+{
+    let arr = str.split('$')
+    if(role == 'vc')
+        arr[0] = change
+    else if(role == 'mm')
+         arr[1] = change
+    else
+        arr[2] = change
+    return arr.join('$') 
+}
+export {getAction,setAction}
