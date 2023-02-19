@@ -27,8 +27,8 @@ export default function Navbar(props) {
      // setUserDetails(localStorage.getItem("name"));
     }
     if (value !== undefined && value === "1") {
-        // setLogin(1);
-        setUserDetails({"role" : localStorage.getItem("userid")})
+        setLogin(true);
+        setUserDetails({"role" : localStorage.getItem("role"),"name" : {"firstname" : localStorage.getItem("name")}})
         // alert("Done")
     }
   }, [props]);
@@ -74,6 +74,7 @@ export default function Navbar(props) {
         localStorage.setItem("islogged", "1");
         localStorage.setItem("jwt", data.token);
         localStorage.setItem("role",data.user.role);
+        localStorage.setItem("name",data.user.name.firstname);
         localStorage.setItem("userid",data.user._id)
         if(data.user.name.firstname === "firstname")
         {

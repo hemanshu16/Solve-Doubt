@@ -1,11 +1,13 @@
 import React from "react";
+import { json } from "react-router-dom";
 
 
 export default function Profile(props) {
     const [login, setLogin] = React.useState(false);
+    const [message,setMessage] = React.useState(true);
     const [userdetails, setUserDetails] = React.useState(
         {
-            name: {
+            "name": {
               "firstname": "firstname",
               "middlename": "middlename",
               "lastname": "lastname"
@@ -28,21 +30,24 @@ export default function Profile(props) {
             "__v": 0
           }
     );
-    async function  getuserdetails (userid)
-    {
+    async function  getuserdetails ()
+    {      let jwt = localStorage.getItem('jwt')
            let headersList = {
                 "Accept": "*/*",
                 "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2YxYjUxMzMxZWZhMTcwNTVkOGQ1MmYiLCJjb2xsZWN0aW9uTmFtZSI6IlVzZXIiLCJpYXQiOjE2NzY3ODkwNDcsImV4cCI6MTY3OTM4MTA0N30.TZ7kOBuTjHcBG7S1v7ZJ4qXVf4yvFhB8_HfefjH7pnU"
+                "Authorization": "Bearer "+localStorage.getItem("jwt")
                }
-               
-               let response = await fetch("localhost:5000/api/user/63f1b51331efa17055d8d52f", { 
+              let userid = localStorage.getItem("userid")
+               let response = await fetch("http://localhost:5000/api/user/" + userid, { 
                  method: "GET",
                  headers: headersList
                });
                
                let data = await response.text();
-               console.log(data);
+               let user = JSON.parse(data).user;
+               if(user !== undefined && user !== null)
+                {setUserDetails(user) 
+                console.log(user)}
     }
     React.useEffect(() => {
         const value = localStorage.getItem("islogged");
@@ -59,7 +64,7 @@ export default function Profile(props) {
     function handleChange(e)
     {
          setUserDetails(oldDetails => {
-            console.log(userdetails)
+            // console.log(userdetails)
             if(e.target.name === "firstname" || e.target.name === "lastname" || e.target.name === "middlename")
             {
                 let name = {...oldDetails.name , [e.target.name] : e.target.value}
@@ -74,31 +79,32 @@ export default function Profile(props) {
             
          })
     }
-    function handleData()
+    async function handleData()
     {
-         // const response = await fetch("http://localhost:8080/Login", {
-    //   method: "POST",
-    //   mode: "cors",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-
-    //   body: JSON.stringify(formData),
-    // });
-    // response.json().then((data) => {
-    //   if (data.error != null) {
-    //     setError({ iserror: true, error: data.error });
-    //   } else {
-        
-    //     props.setLogin(true);
-    //     localStorage.setItem("islogged", "1");
-    //     localStorage.setItem("name", data.user);
-    //     localStorage.setItem("jwt", data.token);
-    //     setName(data.user);
-    //     setError({ iserror: false, error: "" });
-    //     setrError({ iserror: false, error: "" });
-    //   }
-    // })
+        let headersList = {
+            "Accept": "*/*",
+            "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+            "Authorization": "Bearer "+ localStorage.getItem("jwt"),
+            "Content-Type": "application/json"
+           }
+           
+           let bodyContent = JSON.stringify(userdetails);
+           
+           let response = await fetch("http://localhost:5000/api/user/profile", { 
+             method: "PUT",
+             body: bodyContent,
+             headers: headersList
+           });
+           
+           let data = await response.text();
+           setMessage(true);
+        //    console.log(data)
+        //    setUserDetails(JSON.parse(data).user);
+              
+    }
+    function closeMessage()
+    {
+        setMessage(false)
     }
     return (
         <>
@@ -109,8 +115,8 @@ export default function Profile(props) {
                         <div className="col-md-4 border-right">
                             <div className="d-flex flex-column align-items-center text-center ">
                                 <img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" alt="Not Found" />
-                                <span className="font-weight-bold">Edogaru</span>
-                                <span className="text-black-50">edogaru@mail.com.my</span><span> </span></div>
+                                <span className="font-weight-bold">{userdetails.name.firstname}</span>
+                                <span className="text-black-50">{userdetails.email}</span><span> </span></div>
                         
                         </div>
                         <div className="col-md-4 border-right mt-5">
@@ -119,7 +125,7 @@ export default function Profile(props) {
                             <div className="card-body">
                                 <h5 className="card-title">Profile Verifcation</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">Status</h6>
-                                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <p className="card-text">{userdetails.approved}</p>
                 
                             </div>
                             </div>
@@ -153,6 +159,17 @@ export default function Profile(props) {
                             </div>
                         </div>
                     </div>
+                    <div className="position-fixed bottom-0 end-0 p-3" >
+                    <div id="liveToast" className={message? "toast show" : "toast hide"} role="alert" aria-live="assertive" aria-atomic="true">
+                        <div className="toast-header">
+
+                            <strong className="me-auto"> Profile Details Saved</strong>
+
+                            <button type="button" className="btn-close" data-bs-dismiss="toast" onClick={closeMessage} aria-label="Close"></button>
+                        </div>
+
+                    </div>
+                </div>
                 </div>
             </>}
         </>
