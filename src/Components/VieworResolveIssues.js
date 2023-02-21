@@ -5,12 +5,12 @@ import Action from "./Action";
 export default function ViewIssues(props) {
 
     const [app, setApp] = useState([]);
-
+   
     async function getdata() {
         let headersList = {
             "Accept": "*/*",
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem("jwt")
+            "Authorization": "Bearer " + localStorage.getItem('jwt')
         }
 
         let response = await fetch(`http://localhost:5000/api/application/all`, {
@@ -21,9 +21,11 @@ export default function ViewIssues(props) {
         let data = await response.text();
         data = JSON.parse(data)
         console.log(data)
+        console.log("All")
         setApp(data.applications)
     }
     useEffect(() => {
+        // setmessage("Data Saved Successfully")
         getdata();
     }, [])
     // function handleaction(e,str,role,id)
@@ -60,7 +62,7 @@ export default function ViewIssues(props) {
 
     let role = localStorage.getItem('role')
     const comp = app.map((ap) => {
-         <Action props={ap} />
+      return   <Action props={{"ap" : ap,"role" : role}} />
        
     })
     return (
@@ -91,15 +93,7 @@ export default function ViewIssues(props) {
 
                 </div>
                 <div className="position-fixed bottom-0 end-0 p-3" >
-                    <div id="liveToast" className={true ? "toast show" : "toast hide"} role="alert" aria-live="assertive" aria-atomic="true">
-                        <div className="toast-header">
-
-                            <strong className="me-auto"> good morning</strong>
-
-                            <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-
-                    </div>
+                  
                 </div>
             </div>
         </>
