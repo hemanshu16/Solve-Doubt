@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    
+}
+.container1 {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.container2 {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.question {
+    display: flex;
+    flex-direction: column;
+    background-color: #eaf1fb;
+    margin-bottom: 20px;
+    padding: 20px;
+    font-family: 'Source Sans Pro', sans-serif;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.question:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.question-username {
+    font-weight: bold;
+    font-size: 20px;
+}
+.question-date {
+    font-weight: 550;
+}
+.question-description {
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+.question-tags {
+    display: flex;
+    flex-wrap: wrap;
+}
+.question-tag {
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    .question {
+        padding: 10px;
+        font-size: 14px;
+    }
+    .question-username {
+        font-size: 16px;
+    }
+    .question-date {
+        font-size: 12px;
+    }
+    .question-description {
+        font-size: 16px;
+    }
+    .question-tag {
+        font-size: 12px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        padding: 3px 8px;
+    }
+}
+/* @media only screen and (max-width: 480px) {
+    .question-username {
+        font-size: 14px;
+    }
+    .question-date {
+        font-size: 10px;
+    }
+    .question-description {
+        font-size: 14px;
+    }
+    .question-tag {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+} */
+a{
+    text-decoration: none;
+    color:black;
+}
+
+.editor::-webkit-scrollbar {
+    
+       width: 0px;
+      
+}

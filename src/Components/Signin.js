@@ -23,7 +23,10 @@ export default function Signin(props) {
            });
            
            let data = await response.text();
-           localStorage.setItem('name',data);
+           data = JSON.parse(data)
+           console.log(data)
+           localStorage.setItem('name',data.name);
+           localStorage.setItem('id',data.id);
     }
     async function validate()
     {

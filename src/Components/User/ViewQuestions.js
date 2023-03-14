@@ -4,15 +4,18 @@ import parse from 'html-react-parser';
 
 export default function ViewQuestions() {
     const [questions,setQuestions] = React.useState([])
-    async function getQuestions()
+    const [pagenumber,setPageNumber] = React.useState(1)
+
+    async function getQuestions(pagenumber)
     {
+        pagenumber = pagenumber - 1;
         let headersList = {
             "Accept": "*/*",
             "User-Agent": "Thunder Client (https://www.thunderclient.com)",
             "jwt": localStorage.getItem('jwt')
            }
            
-           let response = await fetch("https://localhost:7295/api/Questions/GetQuestions", { 
+           let response = await fetch("https://localhost:7295/api/Questions/GetQuestions?pagenumber=" + pagenumber, { 
              method: "GET",
              headers: headersList
            });
@@ -54,7 +57,7 @@ export default function ViewQuestions() {
            }           
     }
     React.useEffect(()=>{
-        getQuestions();
+        getQuestions(1);
     },[])
     var questions_ =questions.map(question=> {
         return ( <div className="row"><div className="col-md-10 col-xl-8 mx-auto p-4">
@@ -77,6 +80,19 @@ export default function ViewQuestions() {
     </div>
     </div>)
     })
+    async function next_page()
+  {
+      if(questions.length < 10) return;
+      await getQuestions(pagenumber+1)
+      setPageNumber(old => old+1)
+  }
+  async function previous_page()
+  {
+      if(pagenumber == 1) return; console.log(pagenumber)
+
+      await getQuestions(pagenumber-1)
+      setPageNumber(old => old-1)
+  }
   return (
     <div>
        <div className="container py-4 py-xl-5">
@@ -84,6 +100,15 @@ export default function ViewQuestions() {
                {questions_}
            
         </div>
+        <div className='d-flex justify-content-center'>
+     <ul className="pagination">
+       <li className="page-item"><a className="page-link" onClick={previous_page} href="#">Previous</a></li>
+       <li className="page-item"><a className="page-link" onClick={previous_page} href="#">{pagenumber===1 ? '#' : pagenumber -1}</a></li>
+       <li className="page-item"><a className="page-link" href="#">{pagenumber}</a></li>
+       <li className="page-item"><a className="page-link" onClick={next_page} href="#">{questions.length < 10 ? '#' : pagenumber + 1}</a></li>
+       <li className="page-item"><a className="page-link" onClick={next_page} href="#">Next</a></li>
+     </ul>
+     </div>
     </div>
   )
 }
