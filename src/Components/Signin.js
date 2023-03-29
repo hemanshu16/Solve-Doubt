@@ -1,13 +1,22 @@
 import React, { useState } from 'react'
-
+import {useNavigate} from "react-router-dom"
 export default function Signin(props) {
 
     const [formdata, setFormdata] = useState({email : "", password:""})
+    const navigate = useNavigate();
     function handledata(e)
     {
         setFormdata(old => {
             return {...old, [e.target.name] : e.target.value}
         })
+    }
+    const[message, setMessage] = useState({
+        message : "",
+        visible : false
+    })
+    function closeToast()
+    {
+        setMessage({message : "", visible : false});
     }
     async function get_username()
     {
@@ -47,19 +56,22 @@ export default function Signin(props) {
            });
            
            let data = await response.text();
-           alert(data)
+          
            if(data == "UserName or Password is Wrong")
            {
-            alert("UserName or Password is Wrong");
+             setMessage({message : "UserName or Password is Wrong", visible : true})
            }
            else{
            localStorage.setItem("jwt",data);
            await get_username();
+           setMessage({message : "Login Done Successfully", visible : true})
            props.setLogin(true)
+           navigate("/")
            }
            
     }
-  return (
+    
+  return (<>
     <section className="py-5">
     <div className="container py-5">
         <div className="row mb-4 mb-lg-5">
@@ -88,6 +100,28 @@ export default function Signin(props) {
             </div>
         </div>
     </div>
+   
 </section>
+ {/* <div className="position-fixed bottom-0 end-0 p-3" >
+ <div id="liveToast" className={message.visible ? "toast show" : "toast hide"} role="alert" aria-live="assertive" aria-atomic="true">
+   <div className="toast-header">
+     
+     <strong className="me-auto"> {message.visible && message.message}</strong>
+     
+     <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close" onClick={closeToast}></button>
+   </div>
+   
+ </div>
+</div>  */}
+<div className="position-fixed bottom-0 end-0 p-3" >
+<div id="liveToast" className={message.visible ? "toast show" : "toast hide"} role="alert" aria-live="assertive" aria-atomic="true">
+  <div className="d-flex">
+    <div className="toast-body">
+    <strong className="me-auto"> {message.visible && message.message}</strong>
+   </div>
+    <button type="button" className="btn-close me-2 m-auto" data-bs-dismiss="toast" onClick={closeToast} aria-label="Close"></button>
+  </div>
+</div>
+</div></>
   )
 }

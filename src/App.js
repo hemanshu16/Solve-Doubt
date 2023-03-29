@@ -26,9 +26,25 @@ function App() {
          <Route exact path="ViewQuestions/" element={<ViewQuestions />} />        
 
        </Route>  
-       <Route exact path='DetailedQuetion/:questionId' element={ <ViewDetailedQuestion />} />
+       <Route exact path='DetailedQuestion/:questionId' element={ <ViewDetailedQuestion />} />
     </Routes>
   </BrowserRouter>
+
+  <footer className="">
+     <hr className='border border-dark'/>
+      <div className="container pb-4">
+     
+          
+          <div className="text-muted d-flex justify-content-between align-items-center pt-3">
+              <p className="mb-0">Copyright © 2023 <img height="50px" src="/logo.png" alt="logo"/></p>
+              <ul className="list-inline mb-0">
+                 <a href="https://www.linkedin.com/in/hemanshu-faldu-54a732207/" >
+                  <li className="list-inline-item"><img width="25px" style={{"cursor" : "pointer"}} height="25px" src="https://cdn-icons-png.flaticon.com/512/665/665212.png" alt="linkdin"/></li>
+                 </a>
+              </ul>
+          </div>
+      </div>
+  </footer>
   </>
   );
 }

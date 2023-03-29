@@ -10,6 +10,13 @@ export default function UpdateQuestion(props) {
         description : "",
         
     });
+    const[message, setMessage] = React.useState({
+        message : "",
+        visible : false
+    })
+    function closeToast() {
+        setMessage({ message: "", visible: false });
+    }
     const [tags,setTags] = React.useState([
        
     ] )
@@ -47,11 +54,11 @@ export default function UpdateQuestion(props) {
             "Content-Type": "application/json"
            }
            
-           let bodyContent = JSON.stringify({});
+           let bodyContent = JSON.stringify({user_id : localStorage.getItem('id')});
            
            let response = await fetch("https://localhost:7295/api/Questions", { 
              method: "POST",
-             body: JSON.stringify({}),
+             body: bodyContent,
              headers: headersList
            });
            
@@ -169,18 +176,20 @@ export default function UpdateQuestion(props) {
            let data = await response.status;
            data = JSON.parse(data);
            console.log(data);
+           setMessage({message : "Question Updated" , visible : true});
     }
  
-   const Tags = tags.map(tag => {
-        return  <li className="d-lg-flex  " key={tag.id}> {tag.tag_Name}
-        <button type="button" onClick={() => {removeTag( tag.id )}} style={{ "outline": "none", "border": "none", "backgroundColor": "white", }} data-toggle="tooltip" data-placement="top" title="Remove Tag" className="ml-2 mb-1 close" aria-label="Close">
-            <span aria-hidden="true" >&times;</span>
-        </button>
+   
+    let tags_ = tags.map(tag => {
 
-    </li> 
-    })
+        return <li className="list-group-item">{tag.tag_Name} <button type="button" onClick={() => { removeTag(tag.id) }} style={{ "outline": "none", "border": "none", "backgroundColor": "white", }} data-toggle="tooltip" data-placement="top" title="Remove Tag" className="ml-2 mb-1 close" aria-label="Close">
+          <span aria-hidden="true" >&times;</span>
+        </button></li>
+    
+    
+      })
     function handledata(e)
-    {
+    {   
         setQuestion(old => {
             return {...old, [e.target.name] : e.target.value}
         })
@@ -188,36 +197,23 @@ export default function UpdateQuestion(props) {
     return (
         <div>
             <>
-                <section className="py-5">
-                    <div className="container py-5">
+                <section className="pt-5" >
+                    <div className="container pt-5 pb-3 border">
                         <div className="row mb-4 mb-lg-5">
                             <div className="col-md-8 col-xl-6 text-center mx-auto">
-                                <h2 className="fw-bold">Write Question</h2>
+                                <h2 className="fw-bold text-decoration-underline">Write Question</h2>
                             </div>
                         </div><textarea className="my-4 form-control" placeholder="Write your question" name="title" value={question.title} onChange={handledata}></textarea>
                         <div className="mb-3  d-flex justify-content-center">
                             <input className="form-control " type="text" name="tag" placeholder="tagname"  value={tag} onChange={(e) => {setTag(e.target.value)}}/> &nbsp; &nbsp;
                             <button className="btn btn-primary shadow " type='button' onClick={addTag} >Add</button>
                         </div>
-                        <div className="row d-flex justify-content-center">
-                            <div className="col-md-6 col-xl-4">
-                                <div className="card">
-                                    <div className="card-body text-center d-flex flex-column align-items-center">
-                                        <form className="w-100" method="post">
-
-                                            <ul className="list text-start mx-4 w-75">
-                                                {Tags}
-                                               
-                                            </ul>
-                                            <div className="mb-3"></div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-100"></div>
-                        </div>
-                    </div>
-                </section><div className="mt-3 d-flex justify-content-center">
+                        <div className='d-flex justify-content-center mt-3'>
+            <ul className="list-group" style={{ "max-width": "1000px" }}>
+              {tags_}
+            </ul></div> 
+                   
+                    <div className="mt-3 d-flex justify-content-center">
                     <Editor
                         apiKey="ucvs30a0zhhfcrzw215igwkcyjgjm8hkifvvozpbk8ycjbcf"
                         onInit={(evt, editor) => (editorRef.current = editor)}
@@ -254,10 +250,23 @@ export default function UpdateQuestion(props) {
                                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                         }}
                     /></div>
-            </>
-            <div className="mt-3 d-flex justify-content-center">
-                <button className="btn btn-primary shadow  w-10 " onClick={update_question}>Save</button></div>
+                     <div className="mt-3 d-flex justify-content-center">
+                <button className="btn btn-outline-primary shadow  w-10 " onClick={update_question}>Save</button></div>
 
+                     </div>
+                </section>
+               
+            </>
+            <div className="position-fixed bottom-0 end-0 p-3" >
+                <div id="liveToast" className={message.visible ? "toast show" : "toast hide"} role="alert" aria-live="assertive" aria-atomic="true">
+                    <div className="d-flex">
+                        <div className="toast-body">
+                            <strong className="me-auto"> {message.visible && message.message}</strong>
+                        </div>
+                        <button type="button" className="btn-close me-2 m-auto" data-bs-dismiss="toast" onClick={closeToast} aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
