@@ -24,8 +24,11 @@ export default function Navbar(props) {
         <div className="collapse navbar-collapse" id="navcol-1">
             <ul className="navbar-nav mx-auto">
                 <li className="nav-item"><Link className="nav-link" to="../">Home</Link></li>
+                {props.login_status ? <>
                 <li className="nav-item"><Link className="nav-link"to="User/UpdateQuestion">Write Question</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="User/ViewQuestions">View Questions</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="User/Profile">Your Profile</Link></li>
+                </> : "" }
             </ul>
             {props.login_status &&  <><h4> Welcome {name}</h4> &nbsp; &nbsp;
             <a className="btn btn-outline-primary shadow " role="button" onClick={LogOut}>Log Out</a></>

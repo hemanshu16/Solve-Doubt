@@ -8,6 +8,7 @@ import UpdateQuestion from './Components/User/UpdateQuestion';
 import ViewQuestions from './Components/User/ViewQuestions';
 import Home from './Components/Home';
 import ViewDetailedQuestion from './Components/ViewDetailedQuestion';
+import Profile from './Components/User/Profile';
 function App() {
   const [login, setLogin] = React.useState(false)
   return (
@@ -24,7 +25,7 @@ function App() {
          <Route exact path="UpdateQuestion/:questionId" element={<UpdateQuestion />} />
          <Route exact path="UpdateQuestion/" element={<UpdateQuestion />} />     
          <Route exact path="ViewQuestions/" element={<ViewQuestions />} />        
-
+         <Route exact path="Profile/" element={<Profile />} />
        </Route>  
        <Route exact path='DetailedQuestion/:questionId' element={ <ViewDetailedQuestion />} />
     </Routes>
